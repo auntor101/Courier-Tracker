@@ -1,63 +1,51 @@
-# Courier Tracker
+﻿<div align="center">
 
-Parcel and courier management system for booking, tracking, and delivering parcels across branches.
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=28&pause=1000&color=6366F1&center=true&vCenter=true&width=500&lines=Courier+Tracker;Book.+Track.+Deliver." alt="Courier Tracker" />
+
+<p>Multi-role parcel management — book, track, and deliver across branches.</p>
+
+![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?style=flat-square&logo=fastapi&logoColor=white)
+![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind-3-38BDF8?style=flat-square&logo=tailwindcss&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+
+</div>
+
+---
 
 ## Stack
 
-- Python 3.12+ / FastAPI / SQLAlchemy 2.0 (async) / PostgreSQL (or SQLite for local dev)
-- React 18 / TypeScript / Vite / Tailwind CSS
-- JWT authentication with role-based access control
-- Docker Compose for local development
+- **Backend** — FastAPI · SQLAlchemy 2 · PostgreSQL · JWT auth
+- **Frontend** — React 18 · TypeScript · Vite · Tailwind CSS
+- **Hosting** — Render (backend) · Netlify (frontend)
 
-## Features
+---
 
-- Parcel booking with auto-generated tracking codes
-- Status tracking with full timeline history
-- Branch-to-branch transfers
-- Rider assignment and delivery confirmation
-- Cash on delivery (COD) collection
-- Role-based dashboards: Admin, Staff, Rider, Customer
-- Public parcel tracking by code
-- Search, filter, and pagination
-- Mobile-responsive design
-
-## Quick Start
-
-### Docker
-
-```bash
-cp backend/.env.example backend/.env
-# edit backend/.env with your values
-
-docker-compose up --build
-docker-compose exec backend python seed.py
-```
-
-Frontend: http://localhost:3000
-API docs: http://localhost:8000/docs
-
-### Manual Setup (no Docker needed)
+## Development
 
 **Backend**
 
 ```bash
 cd backend
 python -m venv .venv
-
-# Windows:
-.venv\Scripts\activate
-# macOS/Linux:
-source .venv/bin/activate
-
+.venv\Scripts\activate        # Windows
+source .venv/bin/activate     # macOS / Linux
 pip install -r requirements.txt
+```
 
-# Create .env from the example
-cp .env.example .env
-# Edit .env — for local dev without PostgreSQL, use:
-# DATABASE_URL=sqlite+aiosqlite:///./courier_app.db
+Create `backend/.env`:
 
+```env
+DATABASE_URL=postgresql+asyncpg://courier:courier_pass@localhost:5432/courier_db
+SECRET_KEY=change-me
+CORS_ORIGINS=http://localhost:3000
+SEED_PASSWORD=courier_demo_123
+```
+
+```bash
 python seed.py
-uvicorn main:app --reload
+uvicorn main:app --reload --port 8000
 ```
 
 **Frontend**
@@ -68,95 +56,66 @@ npm install
 npm run dev
 ```
 
-Frontend runs at http://localhost:3000 with API proxy to http://localhost:8000.
+---
 
-## Demo Accounts
+## Docker
 
-All seed accounts use the password from `SEED_PASSWORD` in `.env`.
+```bash
+docker-compose up --build
+docker-compose exec backend python seed.py
+```
+
+---
+
+## Deploy
+
+**Backend — [Render](https://render.com)**
+
+1. New **Web Service** — root dir: `backend`
+2. Build: `pip install -r requirements.txt` · Start: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+3. Add a **PostgreSQL** database from the Render dashboard
+4. Environment variables:
+
+| Variable | Value |
+|---|---|
+| `DATABASE_URL` | Render Postgres internal URL (`postgresql+asyncpg://...`) |
+| `SECRET_KEY` | Random 32+ character string |
+| `CORS_ORIGINS` | Your Netlify URL |
+| `SEED_PASSWORD` | Password for seeded accounts |
+
+5. Shell tab → `python seed.py`
+
+**Frontend — [Netlify](https://www.netlify.com)**
+
+1. Import repo · Base dir: `frontend` · Build: `npm run build` · Publish: `dist`
+2. Add environment variable: `VITE_API_URL` = `https://<your-render-app>.onrender.com/api`
+
+---
+
+## Accounts
+
+Password for all accounts: `courier_demo_123`
 
 | Email | Role |
 |---|---|
 | ct.admin@gmail.com | Admin |
-| ct.staff.dhaka@gmail.com | Staff (Dhaka Hub) |
-| ct.staff.ctg@gmail.com | Staff (Chittagong) |
+| ct.staff.dhaka@gmail.com | Staff |
+| ct.staff.ctg@gmail.com | Staff |
 | ct.rider1@gmail.com | Rider |
 | ct.rider2@gmail.com | Rider |
 | ct.customer1@gmail.com | Customer |
 | ct.customer2@gmail.com | Customer |
 
-## Backend Verification
-
-Use these checks to confirm the backend code is healthy.
-
-```bash
-cd backend
-.venv\Scripts\python -m compileall app main.py seed.py
-.venv\Scripts\python -m uvicorn main:app --reload
-```
-
-Open `http://127.0.0.1:8000/api/health` and expect:
-
-```json
-{"status":"ok"}
-```
-
-Do not run route modules directly (for example `app/api/branches.py`).
-They are imported by FastAPI through `main.py`.
-
-## Deployment
-
-### Backend (Render)
-
-1. Create a new Web Service on Render, connect your GitHub repo
-2. Set root directory to `backend`
-3. Build command: `pip install -r requirements.txt`
-4. Start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-5. Add a PostgreSQL database from the Render dashboard
-6. Set environment variables:
-   - `DATABASE_URL` from the Render Postgres connection string (change `postgres://` to `postgresql+asyncpg://`)
-   - `SECRET_KEY` (generate a random string)
-   - `CORS_ORIGINS` (your Vercel frontend URL)
-   - `SEED_PASSWORD` (your preferred demo password)
-7. After deploy, open the shell tab and run `python seed.py`
-
-### Frontend (Vercel)
-
-1. Import the repo on Vercel
-2. Set root directory to `frontend`
-3. Add environment variable: `VITE_API_URL` = `https://your-render-backend-url.onrender.com/api`
-4. Deploy
-
-## API Endpoints
-
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| POST | /api/auth/register | Public | Customer registration |
-| POST | /api/auth/login | Public | Login |
-| POST | /api/auth/refresh | Public | Refresh token |
-| GET | /api/auth/me | User | Current user |
-| GET | /api/users | Admin/Staff | List users |
-| POST | /api/users | Admin | Create user |
-| PATCH | /api/users/:id | Admin | Update user |
-| GET | /api/branches | User | List branches |
-| POST | /api/branches | Admin | Create branch |
-| PATCH | /api/branches/:id | Admin | Update branch |
-| POST | /api/parcels | User | Book parcel |
-| GET | /api/parcels | User | List parcels (role-scoped) |
-| GET | /api/parcels/track/:code | Public | Track by code |
-| GET | /api/parcels/track/:code/timeline | Public | Parcel timeline |
-| PATCH | /api/parcels/:id/status | Staff | Update status |
-| PATCH | /api/parcels/:id/assign | Staff | Assign rider |
-| PATCH | /api/parcels/:id/transfer | Staff | Transfer branch |
-| PATCH | /api/parcels/:id/cod | Rider | Collect COD |
-| GET | /api/dashboard/stats | User | Dashboard stats |
+---
 
 ## Status Flow
 
 ```
-booked -> received_at_branch -> in_transit -> at_destination_branch -> out_for_delivery -> delivered
-                                                                   \-> returned
-                                                out_for_delivery -----> returned
+booked → received_at_branch → in_transit → at_destination_branch → out_for_delivery → delivered
+                                                                                      ↘ returned
 ```
+
+---
 
 ## License
 
