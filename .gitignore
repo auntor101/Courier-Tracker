@@ -12,3 +12,6 @@ frontend/dist/
 .idea/
 .vscode/
 *.db
+
+# Local Netlify folder
+.netlify

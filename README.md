@@ -85,7 +85,7 @@ docker-compose exec backend python seed.py
 
 5. Shell tab → `python seed.py`
 
-**Frontend — [Netlify](https://www.netlify.com)**
+**Frontend — [Netlify](https://www.netlify.com)** · Live: [auntor-courier-tracker.netlify.app](https://auntor-courier-tracker.netlify.app)
 
 1. Import repo · Base dir: `frontend` · Build: `npm run build` · Publish: `dist`
 2. Add environment variable: `VITE_API_URL` = `https://<your-render-app>.onrender.com/api`
