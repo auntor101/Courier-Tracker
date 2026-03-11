@@ -121,16 +121,3 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
     </>
   );
 }
-            </div>
-          </div>
-          <button
-            onClick={() => { logout(); onClose(); }}
-            className="w-full text-left text-sm text-blue-200 hover:text-white transition-colors"
-          >
-            Sign Out
-          </button>
-        </div>
-      </aside>
-    </>
-  );
-}
