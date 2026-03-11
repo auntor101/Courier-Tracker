@@ -128,13 +128,16 @@ async def parcel_timeline(tracking_code: str, db: AsyncSession = Depends(get_db)
 async def update_status(
     parcel_id: int,
     body: StatusUpdate,
-    user: User = Depends(require_staff),
+    user: User = Depends(require_rider),
     db: AsyncSession = Depends(get_db),
 ):
     parcel_row = await db.execute(select(Parcel).where(Parcel.id == parcel_id))
     parcel = parcel_row.scalar_one_or_none()
     if not parcel:
         raise HTTPException(status_code=404, detail="Parcel not found")
+
+    if user.role == "rider" and parcel.assigned_rider_id != user.id:
+        raise HTTPException(status_code=403, detail="You are not assigned to this parcel")
 
     current = ParcelStatus(parcel.status)
     try:
