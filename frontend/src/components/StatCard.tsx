@@ -4,23 +4,22 @@ interface StatCardProps {
   color?: string;
 }
 
-const colorMap: Record<string, string> = {
-  blue: "from-blue-500 to-blue-600",
-  green: "from-emerald-500 to-emerald-600",
-  purple: "from-violet-500 to-violet-600",
-  orange: "from-orange-500 to-orange-600",
-  red: "from-rose-500 to-rose-600",
-  amber: "from-amber-500 to-amber-600",
-  slate: "from-slate-600 to-slate-700",
-  indigo: "from-indigo-500 to-indigo-600",
+const textColors: Record<string, string> = {
+  blue:   "text-blue-600",
+  green:  "text-emerald-600",
+  purple: "text-violet-600",
+  orange: "text-orange-500",
+  red:    "text-rose-600",
+  amber:  "text-amber-500",
+  slate:  "text-slate-700",
+  indigo: "text-indigo-600",
 };
 
-export default function StatCard({ label, value, color = "blue" }: StatCardProps) {
-  const gradient = colorMap[color] || colorMap.blue;
+export default function StatCard({ label, value, color = "indigo" }: StatCardProps) {
   return (
-    <div className={`bg-gradient-to-br ${gradient} rounded-xl p-4 text-white shadow-sm`}>
-      <p className="text-2xl font-bold">{value}</p>
-      <p className="text-sm opacity-80 mt-0.5">{label}</p>
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition-shadow duration-200 animate-slide-up">
+      <p className="text-xs text-slate-400 uppercase tracking-widest font-medium mb-3">{label}</p>
+      <p className={`text-3xl font-bold ${textColors[color] ?? textColors.indigo}`}>{value}</p>
     </div>
   );
 }
