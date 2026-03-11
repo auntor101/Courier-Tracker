@@ -1,44 +1,28 @@
-import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
-interface NavbarProps {
-  onMenuToggle: () => void;
-}
-
-export default function Navbar({ onMenuToggle }: NavbarProps) {
+export default function Navbar({ onMenuToggle }: { onMenuToggle: () => void }) {
   const { user } = useAuth();
 
   return (
-    <header className="bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between lg:px-6 sticky top-0 z-30">
-      <div className="flex items-center gap-3">
-        {user && (
-          <button onClick={onMenuToggle} className="lg:hidden p-1 rounded hover:bg-slate-100">
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-        )}
-        {!user && (
-          <Link to="/" className="text-lg font-bold text-slate-900">
-            CourierTracker
-          </Link>
-        )}
-      </div>
-      <div className="flex items-center gap-3 text-sm">
-        {!user && (
-          <>
-            <Link to="/track" className="text-slate-600 hover:text-blue-600 transition-colors">
-              Track Parcel
-            </Link>
-            <Link
-              to="/login"
-              className="bg-blue-600 text-white px-4 py-1.5 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Login
-            </Link>
-          </>
-        )}
-      </div>
+    <header className="h-14 bg-white border-b border-slate-100 flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30 shrink-0">
+      <button
+        onClick={onMenuToggle}
+        className="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
+        aria-label="Open menu"
+      >
+        <svg className="w-5 h-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+      <div className="flex-1" />
+      {user && (
+        <div className="flex items-center gap-2.5">
+          <span className="text-sm text-slate-500 hidden sm:block truncate max-w-[160px]">{user.full_name}</span>
+          <div className="w-8 h-8 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center select-none shrink-0">
+            {user.full_name.charAt(0).toUpperCase()}
+          </div>
+        </div>
+      )}
     </header>
   );
 }
