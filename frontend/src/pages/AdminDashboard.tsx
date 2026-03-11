@@ -64,7 +64,7 @@ export default function AdminDashboard() {
                 : "text-slate-500 hover:text-slate-700"
             }`}
           >
-            {t}
+            {tabName}
           </button>
         ))}
       </div>

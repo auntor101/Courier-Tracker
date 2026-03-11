@@ -96,7 +96,7 @@ export default function CustomerDashboard() {
             {renderFormInput("District", "recipient_district")}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Payment</label>
-              <select className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" value={bookingbookingForm.payment_type} onChange={(e) => setBookingForm({ ...bookingForm, payment_type: e.target.value })}>
+              <select className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" value={bookingForm.payment_type} onChange={(e) => setBookingForm({ ...bookingForm, payment_type: e.target.value })}>
                 <option value="prepaid">Prepaid</option>
                 <option value="cod">Cash on Delivery</option>
               </select>
@@ -117,7 +117,7 @@ export default function CustomerDashboard() {
             </div>
             {renderFormInput("Weight (kg)", "weight_kg", "number", { step: "0.1", min: "0.1" })}
             {renderFormInput("Price", "price", "number", { step: "1", min: "1" })}
-            {bookingForm.payment_type === "cod" && field("COD Amount", "cod_amount", "number", { step: "1", min: "0" })}
+            {bookingForm.payment_type === "cod" && renderFormInput("COD Amount", "cod_amount", "number", { step: "1", min: "0" })}
             <div className="sm:col-span-2">{renderFormInput("Notes", "notes", "text", { required: false })}</div>
           </div>
           <button type="submit" disabled={submitting} className="mt-4 bg-emerald-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50">

@@ -34,13 +34,13 @@ async def seed():
         await db.flush()
 
         users = [
-            User(email="admin@courier.local", password_hash=hashed_password, full_name="Karim Ahmed", role=Role.ADMIN),
-            User(email="staff.dhaka@courier.local", password_hash=hashed_password, full_name="Rahim Uddin", role=Role.STAFF, branch_id=branches[0].id),
-            User(email="staff.ctg@courier.local", password_hash=hashed_password, full_name="Salma Begum", role=Role.STAFF, branch_id=branches[1].id),
-            User(email="rider1@courier.local", password_hash=hashed_password, full_name="Jamal Hossain", role=Role.RIDER, branch_id=branches[0].id),
-            User(email="rider2@courier.local", password_hash=hashed_password, full_name="Arif Khan", role=Role.RIDER, branch_id=branches[1].id),
-            User(email="customer1@courier.local", password_hash=hashed_password, full_name="Nusrat Jahan", role=Role.CUSTOMER),
-            User(email="customer2@courier.local", password_hash=hashed_password, full_name="Tanvir Rahman", role=Role.CUSTOMER),
+            User(email="ct.admin@gmail.com", password_hash=hashed_password, full_name="Karim Ahmed", role=Role.ADMIN),
+            User(email="ct.staff.dhaka@gmail.com", password_hash=hashed_password, full_name="Rahim Uddin", role=Role.STAFF, branch_id=branches[0].id),
+            User(email="ct.staff.ctg@gmail.com", password_hash=hashed_password, full_name="Salma Begum", role=Role.STAFF, branch_id=branches[1].id),
+            User(email="ct.rider1@gmail.com", password_hash=hashed_password, full_name="Jamal Hossain", role=Role.RIDER, branch_id=branches[0].id),
+            User(email="ct.rider2@gmail.com", password_hash=hashed_password, full_name="Arif Khan", role=Role.RIDER, branch_id=branches[1].id),
+            User(email="ct.customer1@gmail.com", password_hash=hashed_password, full_name="Nusrat Jahan", role=Role.CUSTOMER),
+            User(email="ct.customer2@gmail.com", password_hash=hashed_password, full_name="Tanvir Rahman", role=Role.CUSTOMER),
         ]
         db.add_all(users)
         await db.flush()

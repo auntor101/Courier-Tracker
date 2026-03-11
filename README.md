@@ -4,7 +4,7 @@ Parcel and courier management system for booking, tracking, and delivering parce
 
 ## Stack
 
-- Python 3.12 / FastAPI / SQLAlchemy 2.0 (async) / PostgreSQL
+- Python 3.12+ / FastAPI / SQLAlchemy 2.0 (async) / PostgreSQL (or SQLite for local dev)
 - React 18 / TypeScript / Vite / Tailwind CSS
 - JWT authentication with role-based access control
 - Docker Compose for local development
@@ -36,17 +36,26 @@ docker-compose exec backend python seed.py
 Frontend: http://localhost:3000
 API docs: http://localhost:8000/docs
 
-### Manual Setup
+### Manual Setup (no Docker needed)
 
 **Backend**
 
 ```bash
 cd backend
 python -m venv .venv
+
+# Windows:
 .venv\Scripts\activate
+# macOS/Linux:
+source .venv/bin/activate
+
 pip install -r requirements.txt
-# create .env from .env.example
-alembic upgrade head
+
+# Create .env from the example
+cp .env.example .env
+# Edit .env — for local dev without PostgreSQL, use:
+# DATABASE_URL=sqlite+aiosqlite:///./courier_app.db
+
 python seed.py
 uvicorn main:app --reload
 ```
@@ -59,19 +68,40 @@ npm install
 npm run dev
 ```
 
+Frontend runs at http://localhost:3000 with API proxy to http://localhost:8000.
+
 ## Demo Accounts
 
-All seed accounts use the password from `SEED_PASSWORD` in `.env` (default: `changeme123`).
+All seed accounts use the password from `SEED_PASSWORD` in `.env`.
 
 | Email | Role |
 |---|---|
-| admin@courier.local | Admin |
-| staff.dhaka@courier.local | Staff (Dhaka Hub) |
-| staff.ctg@courier.local | Staff (Chittagong) |
-| rider1@courier.local | Rider |
-| rider2@courier.local | Rider |
-| customer1@example.com | Customer |
-| customer2@example.com | Customer |
+| ct.admin@gmail.com | Admin |
+| ct.staff.dhaka@gmail.com | Staff (Dhaka Hub) |
+| ct.staff.ctg@gmail.com | Staff (Chittagong) |
+| ct.rider1@gmail.com | Rider |
+| ct.rider2@gmail.com | Rider |
+| ct.customer1@gmail.com | Customer |
+| ct.customer2@gmail.com | Customer |
+
+## Backend Verification
+
+Use these checks to confirm the backend code is healthy.
+
+```bash
+cd backend
+.venv\Scripts\python -m compileall app main.py seed.py
+.venv\Scripts\python -m uvicorn main:app --reload
+```
+
+Open `http://127.0.0.1:8000/api/health` and expect:
+
+```json
+{"status":"ok"}
+```
+
+Do not run route modules directly (for example `app/api/branches.py`).
+They are imported by FastAPI through `main.py`.
 
 ## Deployment
 
