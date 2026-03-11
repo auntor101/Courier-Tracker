@@ -47,20 +47,20 @@ export default function AdminDashboard() {
   if (loading) return <Loader />;
 
   const tabs = ["overview", "parcels", "users", "branches"] as const;
-  const inputClassName = "w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none";
+  const inputClassName = "w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-400 outline-none bg-slate-50 focus:bg-white transition-colors";
 
   return (
     <div className="max-w-6xl mx-auto">
       <h1 className="text-xl font-bold mb-5">Admin Dashboard</h1>
 
-      <div className="flex gap-1 mb-6 border-b border-slate-200 overflow-x-auto">
+      <div className="flex gap-1 mb-6 p-1 bg-slate-100 rounded-xl overflow-x-auto">
         {tabs.map((tabName) => (
           <button
             key={tabName}
             onClick={() => setTab(tabName)}
-            className={`px-4 py-2.5 text-sm capitalize whitespace-nowrap transition-colors ${
+            className={`px-4 py-2 text-sm capitalize whitespace-nowrap rounded-lg transition-colors ${
               tab === tabName
-                ? "border-b-2 border-blue-600 text-blue-600 font-medium"
+                ? "bg-white text-slate-900 shadow-sm font-medium"
                 : "text-slate-500 hover:text-slate-700"
             }`}
           >
@@ -119,7 +119,7 @@ export default function AdminDashboard() {
         <div>
           <button
             onClick={() => setShowUserForm(!showUserForm)}
-            className="bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors mb-4"
+            className="bg-indigo-600 text-white px-5 py-2 rounded-xl text-sm font-medium hover:bg-indigo-700 transition-colors mb-4"
           >
             {showUserForm ? "Cancel" : "Add User"}
           </button>
@@ -173,7 +173,7 @@ export default function AdminDashboard() {
         <div>
           <button
             onClick={() => setShowBranchForm(!showBranchForm)}
-            className="bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors mb-4"
+            className="bg-indigo-600 text-white px-5 py-2 rounded-xl text-sm font-medium hover:bg-indigo-700 transition-colors mb-4"
           >
             {showBranchForm ? "Cancel" : "Add Branch"}
           </button>

@@ -102,14 +102,18 @@ export default function StaffDashboard() {
       )}
 
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
-        <input
-          placeholder="Search tracking / name / phone"
-          className="flex-1 border border-slate-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+        <div className="relative flex-1">
+          <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            className="w-full border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 focus:bg-white transition-colors"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
         <select
-          className="border border-slate-300 rounded-lg px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+          className="border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
         >
@@ -160,7 +164,7 @@ export default function StaffDashboard() {
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-1.5">
                       {nextStatus[p.status] && (
-                        <button onClick={() => advance(p.id, p.status)} className="bg-blue-600 text-white px-2.5 py-1 rounded text-xs font-medium hover:bg-blue-700 transition-colors">
+                        <button onClick={() => advance(p.id, p.status)} className="bg-indigo-600 text-white px-2.5 py-1 rounded-lg text-xs font-medium hover:bg-indigo-700 transition-colors">
                           Advance
                         </button>
                       )}

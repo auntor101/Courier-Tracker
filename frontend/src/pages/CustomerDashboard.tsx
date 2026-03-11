@@ -63,7 +63,7 @@ export default function CustomerDashboard() {
         required={opts?.required !== false}
         step={opts?.step}
         min={opts?.min}
-        className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+        className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-400 outline-none bg-slate-50 focus:bg-white transition-colors"
         value={bookingForm[key]}
         onChange={(e) => setBookingForm({ ...bookingForm, [key]: e.target.value })}
       />
@@ -78,7 +78,7 @@ export default function CustomerDashboard() {
         <h1 className="text-xl font-bold">My Parcels</h1>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+          className="bg-indigo-600 text-white px-5 py-2 rounded-xl text-sm font-medium hover:bg-indigo-700 transition-colors"
         >
           {showForm ? "Cancel" : "Book New Parcel"}
         </button>
@@ -96,21 +96,21 @@ export default function CustomerDashboard() {
             {renderFormInput("District", "recipient_district")}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Payment</label>
-              <select className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" value={bookingForm.payment_type} onChange={(e) => setBookingForm({ ...bookingForm, payment_type: e.target.value })}>
+              <select className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50" value={bookingForm.payment_type} onChange={(e) => setBookingForm({ ...bookingForm, payment_type: e.target.value })}>
                 <option value="prepaid">Prepaid</option>
                 <option value="cod">Cash on Delivery</option>
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Origin Branch</label>
-              <select required className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" value={bookingForm.origin_branch_id} onChange={(e) => setBookingForm({ ...bookingForm, origin_branch_id: e.target.value })}>
+              <select required className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50" value={bookingForm.origin_branch_id} onChange={(e) => setBookingForm({ ...bookingForm, origin_branch_id: e.target.value })}>
                 <option value="">Select origin branch</option>
                 {branches.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Destination Branch</label>
-              <select required className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" value={bookingForm.destination_branch_id} onChange={(e) => setBookingForm({ ...bookingForm, destination_branch_id: e.target.value })}>
+              <select required className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50" value={bookingForm.destination_branch_id} onChange={(e) => setBookingForm({ ...bookingForm, destination_branch_id: e.target.value })}>
                 <option value="">Select destination branch</option>
                 {branches.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
               </select>
@@ -120,41 +120,45 @@ export default function CustomerDashboard() {
             {bookingForm.payment_type === "cod" && renderFormInput("COD Amount", "cod_amount", "number", { step: "1", min: "0" })}
             <div className="sm:col-span-2">{renderFormInput("Notes", "notes", "text", { required: false })}</div>
           </div>
-          <button type="submit" disabled={submitting} className="mt-4 bg-emerald-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50">
+          <button type="submit" disabled={submitting} className="mt-4 bg-emerald-600 text-white px-6 py-2 rounded-xl text-sm font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50">
             {submitting ? "Booking..." : "Submit Booking"}
           </button>
         </form>
       )}
 
-      <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b bg-slate-50 text-slate-500 text-xs uppercase tracking-wide">
-                <th className="px-4 py-3 text-left">Tracking</th>
-                <th className="px-4 py-3 text-left">Recipient</th>
-                <th className="px-4 py-3 text-left hidden sm:table-cell">District</th>
-                <th className="px-4 py-3 text-left">Status</th>
-                <th className="px-4 py-3 text-left hidden md:table-cell">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {parcels?.items.map((p) => (
-                <tr key={p.id} className="border-b last:border-0 hover:bg-slate-50 transition-colors">
-                  <td className="px-4 py-3 font-mono text-xs">{p.tracking_code}</td>
-                  <td className="px-4 py-3">{p.recipient_name}</td>
-                  <td className="px-4 py-3 hidden sm:table-cell">{p.recipient_district}</td>
-                  <td className="px-4 py-3"><StatusBadge status={p.status} /></td>
-                  <td className="px-4 py-3 text-slate-400 text-xs hidden md:table-cell">{new Date(p.created_at).toLocaleDateString()}</td>
-                </tr>
-              ))}
-              {parcels && parcels.items.length === 0 && (
-                <tr><td colSpan={5} className="px-4 py-12 text-center text-slate-400">No parcels yet. Book your first parcel above.</td></tr>
-              )}
-            </tbody>
-          </table>
+      {parcels && parcels.items.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-12 text-center text-slate-400">
+          No parcels yet. Book your first one above.
         </div>
-      </div>
+      ) : (
+        <div className="grid gap-3">
+          {parcels?.items.map((p, idx) => (
+            <div
+              key={p.id}
+              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 hover:shadow-md transition-shadow animate-slide-up"
+              style={{ animationDelay: `${idx * 0.04}s` }}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                    <span className="font-mono text-xs text-slate-400">{p.tracking_code}</span>
+                    <StatusBadge status={p.status} />
+                  </div>
+                  <p className="font-medium text-slate-900">{p.recipient_name}</p>
+                  <p className="text-sm text-slate-500 mt-0.5">{p.recipient_address}</p>
+                  <p className="text-xs text-slate-400 mt-1">{p.recipient_district} · {new Date(p.created_at).toLocaleDateString()}</p>
+                </div>
+                <div className="text-right shrink-0">
+                  <p className="text-sm font-semibold text-slate-900">৳{p.price}</p>
+                  {p.payment_type === "cod" && (
+                    <p className="text-xs text-slate-400 mt-0.5">COD ৳{p.cod_amount}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
