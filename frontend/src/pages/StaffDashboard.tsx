@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Loader from "../components/Loader";
 import StatCard from "../components/StatCard";
 import StatusBadge from "../components/StatusBadge";
@@ -21,6 +21,7 @@ export default function StaffDashboard() {
   const [statusFilter, setStatusFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const skipFirstDebounce = useRef(true);
 
   const load = async () => {
     try {
@@ -48,6 +49,7 @@ export default function StaffDashboard() {
   }, []);
 
   useEffect(() => {
+    if (skipFirstDebounce.current) { skipFirstDebounce.current = false; return; }
     const debounceTimer = setTimeout(() => load(), 300);
     return () => clearTimeout(debounceTimer);
   }, [search, statusFilter]);
@@ -169,7 +171,7 @@ export default function StaffDashboard() {
                         </button>
                       )}
                       {(p.status === "received_at_branch" || p.status === "in_transit") && (
-                        <select className="border border-slate-300 rounded px-2 py-1 text-xs" defaultValue="" onChange={(e) => { if (e.target.value) transfer(p.id, Number(e.target.value)); }}>
+                        <select key={p.current_branch_id} className="border border-slate-300 rounded px-2 py-1 text-xs" value="" onChange={(e) => { if (e.target.value) transfer(p.id, Number(e.target.value)); }}>
                           <option value="">Transfer</option>
                           {branches.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
                         </select>

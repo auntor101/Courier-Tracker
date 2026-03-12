@@ -16,6 +16,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [showUserForm, setShowUserForm] = useState(false);
   const [showBranchForm, setShowBranchForm] = useState(false);
+  const [formError, setFormError] = useState("");
   const [userForm, setUserForm] = useState({ email: "", password: "", full_name: "", role: "staff", branch_id: "" });
   const [branchForm, setBranchForm] = useState({ name: "", district: "", address: "", phone: "" });
 
@@ -30,18 +31,30 @@ export default function AdminDashboard() {
 
   const createUser = async (e: FormEvent) => {
     e.preventDefault();
-    await api.post("/users", { ...userForm, branch_id: userForm.branch_id ? Number(userForm.branch_id) : null });
-    setShowUserForm(false);
-    setUserForm({ email: "", password: "", full_name: "", role: "staff", branch_id: "" });
-    api.get("/users").then(({ data }) => setUsers(data));
+    setFormError("");
+    try {
+      await api.post("/users", { ...userForm, branch_id: userForm.branch_id ? Number(userForm.branch_id) : null });
+      setShowUserForm(false);
+      setUserForm({ email: "", password: "", full_name: "", role: "staff", branch_id: "" });
+      api.get("/users").then(({ data }) => setUsers(data));
+    } catch (e: unknown) {
+      const err = e as { response?: { data?: { detail?: string } } };
+      setFormError(err.response?.data?.detail || "Failed to create user.");
+    }
   };
 
   const createBranch = async (e: FormEvent) => {
     e.preventDefault();
-    await api.post("/branches", branchForm);
-    setShowBranchForm(false);
-    setBranchForm({ name: "", district: "", address: "", phone: "" });
-    api.get("/branches").then(({ data }) => setBranches(data));
+    setFormError("");
+    try {
+      await api.post("/branches", branchForm);
+      setShowBranchForm(false);
+      setBranchForm({ name: "", district: "", address: "", phone: "" });
+      api.get("/branches").then(({ data }) => setBranches(data));
+    } catch (e: unknown) {
+      const err = e as { response?: { data?: { detail?: string } } };
+      setFormError(err.response?.data?.detail || "Failed to create branch.");
+    }
   };
 
   if (loading) return <Loader />;
@@ -143,6 +156,7 @@ export default function AdminDashboard() {
                   </select>
                 </div>
               </div>
+              {formError && <p className="mt-3 text-sm text-rose-600">{formError}</p>}
               <button type="submit" className="mt-4 bg-emerald-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors">Create User</button>
             </form>
           )}
@@ -185,6 +199,7 @@ export default function AdminDashboard() {
                 <div><label className="block text-sm font-medium text-slate-700 mb-1">Address</label><input required className={inputClassName} value={branchForm.address} onChange={(e) => setBranchForm({ ...branchForm, address: e.target.value })} /></div>
                 <div><label className="block text-sm font-medium text-slate-700 mb-1">Phone</label><input required className={inputClassName} value={branchForm.phone} onChange={(e) => setBranchForm({ ...branchForm, phone: e.target.value })} /></div>
               </div>
+              {formError && <p className="mt-3 text-sm text-rose-600">{formError}</p>}
               <button type="submit" className="mt-4 bg-emerald-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors">Create Branch</button>
             </form>
           )}

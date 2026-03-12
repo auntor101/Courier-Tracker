@@ -4,6 +4,13 @@ import { useAuth } from "../hooks/useAuth";
 
 const input = "w-full border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all";
 
+const roleHome: Record<string, string> = {
+  admin: "/admin",
+  staff: "/staff",
+  rider: "/rider",
+  customer: "/customer",
+};
+
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -17,8 +24,8 @@ export default function Login() {
     setError("");
     setLoading(true);
     try {
-      await login(email, password);
-      navigate("/");
+      const user = await login(email, password);
+      navigate(roleHome[user.role] || "/", { replace: true });
     } catch {
       setError("Invalid email or password.");
     } finally {

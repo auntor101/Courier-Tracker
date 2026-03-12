@@ -12,7 +12,7 @@ import { User } from "../types";
 interface AuthState {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<User>;
   register: (email: string, password: string, fullName: string) => Promise<void>;
   logout: () => void;
 }
@@ -58,11 +58,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     fetchUser();
   }, [fetchUser]);
 
-  const login = async (email: string, password: string) => {
-    const { data } = await api.post("/auth/login", { email, password });
-    localStorage.setItem("access_token", data.access_token);
-    localStorage.setItem("refresh_token", data.refresh_token);
-    await fetchUser();
+  const login = async (email: string, password: string): Promise<User> => {
+    const { data: tokens } = await api.post("/auth/login", { email, password });
+    localStorage.setItem("access_token", tokens.access_token);
+    localStorage.setItem("refresh_token", tokens.refresh_token);
+    const { data: userData } = await api.get("/auth/me");
+    setUser(userData);
+    return userData;
   };
 
   const register = async (email: string, password: string, fullName: string) => {
